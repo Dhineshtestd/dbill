@@ -134,6 +134,87 @@ document.getElementById('bluetoothPrintBtn').addEventListener('click', async () 
     }
 });
 
+// Thermal Print View
+document.getElementById('thermalPrintBtn').addEventListener('click', () => {
+    const dcRef = document.getElementById('displayDcRef').textContent;
+    const date = document.getElementById('displayDate').textContent;
+    const party = document.getElementById('displayParty').textContent;
+    const loading = document.getElementById('displayLoading').textContent;
+    const unloading = document.getElementById('displayUnloading').textContent;
+    const transport = document.getElementById('displayTransport').textContent;
+    const truck = document.getElementById('displayTruck').textContent;
+    const item = document.getElementById('displayItem').textContent;
+    const hsn = document.getElementById('displayHsn').textContent;
+    const emptyQty = document.getElementById('displayEmptyQty').textContent;
+    const fullQty = document.getElementById('displayFullQty').textContent;
+    const netQty = document.getElementById('displayNetQty').textContent;
+    const paymentMode = document.getElementById('displayPaymentMode').textContent;
+
+    const thermalWindow = window.open('', '_blank');
+    thermalWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Thermal Print - Delivery Challan</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Courier New', monospace;
+                    width: 80mm;
+                    margin: 0 auto;
+                    padding: 5mm;
+                    background: white;
+                    font-size: 9pt;
+                    line-height: 1.4;
+                }
+                .line { border-top: 1px solid #000; margin: 3mm 0; }
+                .line-thick { border-top: 2px solid #000; margin: 3mm 0; }
+                .center { text-align: center; }
+                .bold { font-weight: bold; letter-spacing: 1px; }
+                .row { display: flex; justify-content: space-between; margin: 2mm 0; }
+                .label { flex: 0 0 auto; }
+                .value { text-align: right; margin-left: 5mm; }
+                .spacer { height: 5mm; }
+                @media print {
+                    @page { size: 80mm auto; margin: 0; }
+                    body { width: 80mm; padding: 3mm; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="line-thick"></div>
+            <div class="center">Delivery Challan</div>
+            <div style="margin: 3mm 0;">
+                Date: ${date}<br>
+                DC/Ref #: ${dcRef}
+            </div>
+            <div class="line"></div>
+            <div class="center bold">OUTGOING TRIP</div>
+            <div class="spacer"></div>
+            <div class="row"><span class="label">Party:</span><span class="value">${party}</span></div>
+            <div class="row"><span class="label">Loading:</span><span class="value">${loading}</span></div>
+            <div class="row"><span class="label">UnLoading:</span><span class="value">${unloading}</span></div>
+            <div class="row"><span class="label">Transport:</span><span class="value">${transport}</span></div>
+            <div class="row"><span class="label">Truck #:</span><span class="value">${truck}</span></div>
+            <div class="row"><span class="label">Item:</span><span class="value">${item}</span></div>
+            <div class="row"><span class="label">HSN/SAC:</span><span class="value">${hsn}</span></div>
+            <div class="row"><span class="label">Empty Qty:</span><span class="value">${emptyQty}</span></div>
+            <div class="row"><span class="label">Full Qty:</span><span class="value">${fullQty}</span></div>
+            <div class="row"><span class="label">Net Qty:</span><span class="value">${netQty}</span></div>
+            <div class="row"><span class="label">Payment Mode</span><span class="value">${paymentMode}</span></div>
+            <div class="line-thick"></div>
+            <div class="spacer"></div>
+            <div class="center" style="margin-top: 5mm;">
+                <button onclick="window.print()" style="padding: 10px 20px; background: #2196F3; color: white; border: none; cursor: pointer; font-size: 14px; border-radius: 4px;">Print Now</button>
+            </div>
+        </body>
+        </html>
+    `);
+    thermalWindow.document.close();
+});
+
 // Generate challan text for thermal printer
 function generateChallanText() {
     const dcRef = document.getElementById('displayDcRef').textContent;

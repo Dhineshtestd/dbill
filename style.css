@@ -187,6 +187,22 @@ button[type="submit"]:hover {
     background: #7B1FA2;
 }
 
+.thermal-btn {
+    padding: 12px;
+    background: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.thermal-btn:hover {
+    background: #F57C00;
+}
+
 .install-prompt {
     background: #e3f2fd;
     border: 2px solid #2196F3;
