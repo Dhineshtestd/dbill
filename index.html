@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="description" content="Generate and print delivery challans">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Challan">
+    <title>Delivery Challan Generator</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>Delivery Challan Generator</h1>
+            <form id="challanForm">
+                <div class="form-group">
+                    <label>DC/Ref #:</label>
+                    <input type="text" id="dcRef" value="24807" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Party:</label>
+                    <input type="text" id="party" value="SEENU" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Loading:</label>
+                    <input type="text" id="loading" value="DHARMA DEV" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Unloading:</label>
+                    <input type="text" id="unloading" value="PARTY SITE" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Transport:</label>
+                    <input type="text" id="transport" value="SEENU" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Truck #:</label>
+                    <input type="text" id="truck" value="TN 87 6073" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Item:</label>
+                    <input type="text" id="item" value="20 MM" required>
+                </div>
+
+                <div class="form-group">
+                    <label>HSN/SAC:</label>
+                    <input type="text" id="hsn" value="25171010" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Empty Qty (MT):</label>
+                    <input type="text" id="emptyQty" value="3.52" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Qty (MT):</label>
+                    <input type="text" id="fullQty" value="7.65" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Mode:</label>
+                    <input type="text" id="paymentMode" value="Cash" required>
+                </div>
+
+                <button type="submit">Generate Challan</button>
+            </form>
+        </div>
+
+        <div class="preview-section">
+            <div id="challan" class="challan">
+                <div class="challan-header">
+                    <div class="header-line"></div>
+                </div>
+                <div class="challan-title">Delivery Challan</div>
+                <div class="challan-date">
+                    Date: <span id="displayDate"></span><br>
+                    DC/Ref #: <span id="displayDcRef">24807</span>
+                </div>
+                <div class="header-line-thin"></div>
+                <div class="trip-type">OUTGOING TRIP</div>
+                <div class="challan-details">
+                    <div class="detail-row">
+                        <span class="label">Party:</span>
+                        <span class="value" id="displayParty">SEENU</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Loading:</span>
+                        <span class="value" id="displayLoading">DHARMA DEV</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">UnLoading:</span>
+                        <span class="value" id="displayUnloading">PARTY SITE</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Transport:</span>
+                        <span class="value" id="displayTransport">SEENU</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Truck #:</span>
+                        <span class="value" id="displayTruck">TN 87 6073</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Item:</span>
+                        <span class="value" id="displayItem">20 MM</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">HSN/SAC:</span>
+                        <span class="value" id="displayHsn">25171010</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Empty Qty:</span>
+                        <span class="value" id="displayEmptyQty">3.52 MT</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Full Qty:</span>
+                        <span class="value" id="displayFullQty">7.65 MT</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Net Qty:</span>
+                        <span class="value" id="displayNetQty">4.13 MT</span>
+                    </div>
+                    <div class="detail-row payment-row">
+                        <span class="label">Payment Mode</span>
+                        <span class="value" id="displayPaymentMode">Cash</span>
+                    </div>
+                </div>
+                <div class="footer-line"></div>
+            </div>
+            <button id="printBtn" onclick="window.print()">Print Challan</button>
+            <button id="bluetoothPrintBtn" class="bluetooth-btn">Print via Bluetooth</button>
+            <div id="installPrompt" class="install-prompt" style="display: none;">
+                <strong>📱 Install App</strong><br>
+                Add to home screen for offline access
+                <button id="installBtn">Install</button>
+            </div>
+            <div class="print-instructions">
+                <strong>For PDF Export:</strong><br>
+                1. Click "Print Challan"<br>
+                2. Choose "Save as PDF"<br>
+                3. In "More settings" → Paper size: Select "Custom" or "80mm"<br>
+                4. Set margins to "None"<br>
+                5. Save
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
