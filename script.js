@@ -84,26 +84,53 @@ installBtn.addEventListener('click', async () => {
 // Bluetooth Printing
 document.getElementById('bluetoothPrintBtn').addEventListener('click', async () => {
     try {
-        // Request Bluetooth device
-        const device = await navigator.bluetooth.requestDevice({
-            filters: [{ services: ['000018f0-0000-1000-8000-00805f9b34fb'] }],
-            optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
-        });
-
-        const server = await device.gatt.connect();
-        const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-        const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
-
         // Generate ESC/POS commands for thermal printer
         const challanText = generateChallanText();
-        const encoder = new TextEncoder();
-        const data = encoder.encode(challanText);
-
-        await characteristic.writeValue(data);
-        alert('Printed successfully!');
+        
+        // Check if we're on mobile
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        if (isMobile && navigator.share) {
+            // Create a text file that thermal printer apps can read
+            const blob = new Blob([challanText], { type: 'text/plain' });
+            const file = new File([blob], 'challan.txt', { type: 'text/plain' });
+            
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: 'Print Challan',
+                    text: 'Open with thermal printer app'
+                });
+            } catch (shareError) {
+                // Fallback: Open in new window for copying
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write('<pre style="font-family: monospace; font-size: 12px; white-space: pre-wrap;">' + challanText + '</pre>');
+                printWindow.document.write('<p>Copy this text and paste in your thermal printer app (Thermal Printer, Raw BT, etc.)</p>');
+            }
+        } else {
+            // Desktop: Show text to copy
+            const printWindow = window.open('', '_blank', 'width=400,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Challan</title>
+                    <style>
+                        body { font-family: monospace; padding: 20px; }
+                        pre { background: #f5f5f5; padding: 15px; border: 1px solid #ddd; white-space: pre-wrap; }
+                        button { padding: 10px 20px; background: #2196F3; color: white; border: none; cursor: pointer; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <h3>Copy and paste this in your thermal printer app:</h3>
+                    <button onclick="navigator.clipboard.writeText(document.querySelector('pre').textContent); alert('Copied!')">Copy Text</button>
+                    <pre>${challanText}</pre>
+                </body>
+                </html>
+            `);
+        }
     } catch (error) {
-        console.error('Bluetooth print error:', error);
-        alert('Bluetooth printing failed. Make sure your printer is paired and supports Bluetooth printing.\n\nError: ' + error.message);
+        console.error('Print error:', error);
+        alert('Error preparing print. Please try regular print option.');
     }
 });
 
@@ -123,36 +150,31 @@ function generateChallanText() {
     const netQty = document.getElementById('displayNetQty').textContent;
     const paymentMode = document.getElementById('displayPaymentMode').textContent;
 
-    // ESC/POS formatting
-    const ESC = '\x1B';
-    const INIT = ESC + '@';
-    const CENTER = ESC + 'a' + '\x01';
-    const LEFT = ESC + 'a' + '\x00';
-    const BOLD_ON = ESC + 'E' + '\x01';
-    const BOLD_OFF = ESC + 'E' + '\x00';
-    const CUT = ESC + 'i';
-    const LINE = '--------------------------------\n';
+    // Plain text format for thermal printer apps
+    return `
+--------------------------------
+     Delivery Challan
+--------------------------------
+Date: ${date}
+DC/Ref #: ${dcRef}
+--------------------------------
+     OUTGOING TRIP
+--------------------------------
 
-    return INIT +
-        LINE +
-        CENTER + 'Delivery Challan\n' +
-        LEFT + 'Date: ' + date + '\n' +
-        'DC/Ref #: ' + dcRef + '\n' +
-        LINE +
-        CENTER + BOLD_ON + 'OUTGOING TRIP\n' + BOLD_OFF +
-        LEFT +
-        'Party:            ' + party + '\n' +
-        'Loading:          ' + loading + '\n' +
-        'UnLoading:        ' + unloading + '\n' +
-        'Transport:        ' + transport + '\n' +
-        'Truck #:          ' + truck + '\n' +
-        'Item:             ' + item + '\n' +
-        'HSN/SAC:          ' + hsn + '\n' +
-        'Empty Qty:        ' + emptyQty + '\n' +
-        'Full Qty:         ' + fullQty + '\n' +
-        'Net Qty:          ' + netQty + '\n' +
-        'Payment Mode      ' + paymentMode + '\n' +
-        LINE +
-        '\n\n\n' +
-        CUT;
+Party:            ${party}
+Loading:          ${loading}
+UnLoading:        ${unloading}
+Transport:        ${transport}
+Truck #:          ${truck}
+Item:             ${item}
+HSN/SAC:          ${hsn}
+Empty Qty:        ${emptyQty}
+Full Qty:         ${fullQty}
+Net Qty:          ${netQty}
+Payment Mode      ${paymentMode}
+
+--------------------------------
+
+
+`;
 }

@@ -137,19 +137,24 @@
                 <div class="footer-line"></div>
             </div>
             <button id="printBtn" onclick="window.print()">Print Challan</button>
-            <button id="bluetoothPrintBtn" class="bluetooth-btn">Print via Bluetooth</button>
+            <button id="bluetoothPrintBtn" class="bluetooth-btn">Share to Thermal Printer App</button>
             <div id="installPrompt" class="install-prompt" style="display: none;">
                 <strong>📱 Install App</strong><br>
                 Add to home screen for offline access
                 <button id="installBtn">Install</button>
             </div>
             <div class="print-instructions">
-                <strong>For PDF Export:</strong><br>
+                <strong>📱 Mobile Thermal Printing:</strong><br>
+                1. Install a thermal printer app (Thermal Printer, Raw BT, etc.)<br>
+                2. Pair your Bluetooth printer in phone settings<br>
+                3. Click "Share to Thermal Printer App"<br>
+                4. Select your thermal printer app<br>
+                5. Print from the app<br><br>
+                <strong>💻 Desktop PDF Export:</strong><br>
                 1. Click "Print Challan"<br>
                 2. Choose "Save as PDF"<br>
-                3. In "More settings" → Paper size: Select "Custom" or "80mm"<br>
-                4. Set margins to "None"<br>
-                5. Save
+                3. Set paper size to "Custom" (80mm width)<br>
+                4. Set margins to "None"
             </div>
         </div>
     </div>
